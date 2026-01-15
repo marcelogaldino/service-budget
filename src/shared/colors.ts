@@ -1,0 +1,23 @@
+export const colors = {
+  "purple-light": "#DFDAF2",
+  "purple-base": "#6A46EB",
+  "danger-light": "#FFD6D6",
+  "danger-base": "#DB4D4D",
+  "danger-dark": "#9E4949",
+  "success-light": "#BFF7BE",
+  "success-base": "#4BB84A",
+  "success-dark": "#30752F",
+  "info-light": "#CEEFFF",
+  "info-base": "#2AA1D9",
+  "info-dark": "#1D7096",
+  white: "#FFFFFF",
+  gray: {
+    700: "#0F0F0F",
+    600: "#4A4A4A",
+    500: "#676767",
+    400: "#A1A2A1",
+    300: "#E6E5E5",
+    200: "#F0F0F0",
+    100: "#FAFAFA",
+  },
+};
