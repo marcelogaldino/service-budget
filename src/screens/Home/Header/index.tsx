@@ -19,6 +19,7 @@ export const Header = () => {
         </Text>
       </View>
       <Button
+        onPress={() => navigation.navigate("Budget")}
         name="Novo"
         mode="filled"
         icon={<Plus color={colors.white} size={24} />}
