@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
   return (
-    <SafeAreaView className="bg-white flex-1 p-5">
+    <SafeAreaView className="bg-white flex-1">
       <Routes />
       <StatusBar style="dark" translucent backgroundColor="transparent" />
     </SafeAreaView>
