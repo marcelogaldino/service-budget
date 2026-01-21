@@ -5,9 +5,11 @@ import {
   ScrollView,
   Text,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useState } from "react";
 import { Header } from "./Header";
 import { Button } from "@/components/Button";
 import { Check } from "@/assets/icons/Check";
@@ -18,8 +20,13 @@ import { StatusTypes } from "@/components/Status/strategies/status-stategy";
 import { NoteWithText } from "@/assets/icons/NoteWithText";
 import { Plus } from "@/assets/icons/Plus";
 import { CreditCard } from "@/assets/icons/CreditCard";
+import { RadioButton } from "@/components/RadioButton";
+import { EditPen } from "@/assets/icons/EditPen";
+import { colors } from "@/shared/colors";
 
 export const CreateBudget = () => {
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+
   return (
     <View className="flex-1 bg-white">
       <Header />
@@ -71,12 +78,31 @@ export const CreateBudget = () => {
                 </View>
 
                 <View className="p-4 gap-2">
-                  <View className="flex-row justify-around">
+                  <View className="flex-row justify-start gap-6 items-center">
+                    <RadioButton
+                      isSelected={selectedStatus === StatusTypes.RASCUNHO}
+                      onPress={() => setSelectedStatus(StatusTypes.RASCUNHO)}
+                    />
                     <Status statusType={StatusTypes.RASCUNHO} />
+                    <RadioButton
+                      isSelected={selectedStatus === StatusTypes.APROVADO}
+                      onPress={() => setSelectedStatus(StatusTypes.APROVADO)}
+                    />
+
                     <Status statusType={StatusTypes.APROVADO} />
                   </View>
-                  <View className="flex-row justify-around">
+                  <View className="flex-row justify-start gap-6 items-center">
+                    <RadioButton
+                      isSelected={selectedStatus === StatusTypes.ENVIADO}
+                      onPress={() => setSelectedStatus(StatusTypes.ENVIADO)}
+                    />
+
                     <Status statusType={StatusTypes.ENVIADO} />
+                    <RadioButton
+                      isSelected={selectedStatus === StatusTypes.RECUSADO}
+                      onPress={() => setSelectedStatus(StatusTypes.RECUSADO)}
+                    />
+
                     <Status statusType={StatusTypes.RECUSADO} />
                   </View>
                 </View>
@@ -93,15 +119,63 @@ export const CreateBudget = () => {
                 </View>
 
                 <View className="p-4 gap-2">
-                  <TextInput
-                    className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
-                    placeholder="Título"
-                  />
+                  <View className="flex-row justify-center mb-5">
+                    <View className="flex-1">
+                      <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
+                        Design de interfaces
+                      </Text>
+                      <Text className="font-normal text-xs leading-4 text-gray-500">
+                        Criação de wireframes e protóti...
+                      </Text>
+                    </View>
 
-                  <TextInput
-                    className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
-                    placeholder="Cliente"
-                  />
+                    <View className=" items-end justify-center">
+                      <View className="flex-row justify-center items-center mb-[2px]">
+                        <Text className="font-normal text-xs leading-4 text-gray-700">
+                          R${"  "}
+                        </Text>
+                        <Text className="font-bold text-base leading-5 text-gray-700">
+                          3.847,50
+                        </Text>
+                      </View>
+                      <Text className="font-normal text-xs leading-4 text-gray-600 ">
+                        Qt: 1
+                      </Text>
+                    </View>
+
+                    <TouchableOpacity className="ml-4 justify-center">
+                      <EditPen size={20} color={colors["purple-base"]} />
+                    </TouchableOpacity>
+                  </View>
+
+                  <View className="flex-row justify-center mb-5">
+                    <View className="flex-1">
+                      <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
+                        Design de interfaces
+                      </Text>
+                      <Text className="font-normal text-xs leading-4 text-gray-500">
+                        Criação de wireframes e protóti...
+                      </Text>
+                    </View>
+
+                    <View className=" items-end justify-center">
+                      <View className="flex-row justify-center items-center mb-[2px]">
+                        <Text className="font-normal text-xs leading-4 text-gray-700">
+                          R${"  "}
+                        </Text>
+                        <Text className="font-bold text-base leading-5 text-gray-700">
+                          3.847,50
+                        </Text>
+                      </View>
+                      <Text className="font-normal text-xs leading-4 text-gray-600 ">
+                        Qt: 1
+                      </Text>
+                    </View>
+
+                    <TouchableOpacity className="ml-4 justify-center">
+                      <EditPen size={20} color={colors["purple-base"]} />
+                    </TouchableOpacity>
+                  </View>
 
                   <Button
                     name="Adiocionar serviço"
@@ -122,15 +196,50 @@ export const CreateBudget = () => {
                 </View>
 
                 <View className="p-4 gap-2">
-                  <TextInput
-                    className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
-                    placeholder="Título"
-                  />
+                  <View className="flex-row justify-between items-center">
+                    <Text className="font-normal text-sm text-gray-700">
+                      Subtotal
+                    </Text>
+                    <View className="flex-row gap-3 justify-center items-center">
+                      <Text className="font-normal text-xs text-gray-600">
+                        8 itens
+                      </Text>
+                      <View className="flex-row justify-center items-center">
+                        <Text className="font-normal text-xs leading-4 text-gray-700">
+                          R${"  "}
+                        </Text>
+                        <Text className="font-normal text-sm leading-5 text-gray-700">
+                          3.847,50
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
 
-                  <TextInput
-                    className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
-                    placeholder="Cliente"
-                  />
+                  <View className="flex-row justify-between items-center">
+                    <View className="flex-row gap-2 justify-center items-center">
+                      <Text className="font-normal text-sm text-gray-700">
+                        Desconto
+                      </Text>
+                      <View className="w-[75px] h-[42px] px-3 items-center justify-center bg-gray-100 border border-gray-300 rounded-full flex-row">
+                        <TextInput
+                          className="flex-1 items-center justify-center text-sm font-normal text-gray-700"
+                          placeholder="0"
+                          keyboardType="numeric"
+                        />
+                        <Text className="font-bold text-base text-gray-600">
+                          %
+                        </Text>
+                      </View>
+                    </View>
+                    <View className="flex-row justify-center items-center">
+                      <Text className="font-normal text-xs leading-4 text-danger-base">
+                        - R${" "}
+                      </Text>
+                      <Text className="font-normal text-sm leading-5 text-danger-base">
+                        3.847,50
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               </View>
             </View>
