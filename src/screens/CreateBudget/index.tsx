@@ -23,9 +23,16 @@ import { CreditCard } from "@/assets/icons/CreditCard";
 import { RadioButton } from "@/components/RadioButton";
 import { EditPen } from "@/assets/icons/EditPen";
 import { colors } from "@/shared/colors";
+import { useStorage } from "@/hooks/useStorage";
+import { BudgetDoc } from "@/shared/storage/types/budget";
 
 export const CreateBudget = () => {
-  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const { setValue } = useStorage<BudgetDoc>("BudgetDoc");
+  const [title, setTitle] = useState<string>("");
+  const [customer, setCustomer] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<StatusTypes>(
+    StatusTypes.RASCUNHO,
+  );
 
   return (
     <View className="flex-1 bg-white">
@@ -58,11 +65,15 @@ export const CreateBudget = () => {
                   <TextInput
                     className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
                     placeholder="Título"
+                    value={title}
+                    onChangeText={setTitle}
                   />
 
                   <TextInput
                     className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
                     placeholder="Cliente"
+                    value={customer}
+                    onChangeText={setCustomer}
                   />
                 </View>
               </View>
@@ -119,7 +130,7 @@ export const CreateBudget = () => {
                 </View>
 
                 <View className="p-4 gap-2">
-                  <View className="flex-row justify-center mb-5">
+                  {/* <View className="flex-row justify-center mb-5">
                     <View className="flex-1">
                       <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
                         Design de interfaces
@@ -146,19 +157,19 @@ export const CreateBudget = () => {
                     <TouchableOpacity className="ml-4 justify-center">
                       <EditPen size={20} color={colors["purple-base"]} />
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
 
-                  <View className="flex-row justify-center mb-5">
-                    <View className="flex-1">
+                  {/* <View className="flex-row justify-center mb-5"> */}
+                  {/* <View className="flex-1">
                       <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
                         Design de interfaces
                       </Text>
                       <Text className="font-normal text-xs leading-4 text-gray-500">
                         Criação de wireframes e protóti...
                       </Text>
-                    </View>
+                    </View> */}
 
-                    <View className=" items-end justify-center">
+                  {/* <View className=" items-end justify-center">
                       <View className="flex-row justify-center items-center mb-[2px]">
                         <Text className="font-normal text-xs leading-4 text-gray-700">
                           R${"  "}
@@ -170,12 +181,12 @@ export const CreateBudget = () => {
                       <Text className="font-normal text-xs leading-4 text-gray-600 ">
                         Qt: 1
                       </Text>
-                    </View>
+                    </View> */}
 
-                    <TouchableOpacity className="ml-4 justify-center">
+                  {/* <TouchableOpacity className="ml-4 justify-center">
                       <EditPen size={20} color={colors["purple-base"]} />
-                    </TouchableOpacity>
-                  </View>
+                    </TouchableOpacity> */}
+                  {/* </View> */}
 
                   <Button
                     name="Adiocionar serviço"
@@ -248,7 +259,27 @@ export const CreateBudget = () => {
 
         <View className="flex-row justify-center items-center gap-4 px-5 pt-5 pb-10 w-full bg-white border-t border-gray-200">
           <Button name="Cancelar" mode="outline" />
-          <Button name="Salvar" icon={<Check color="#FFFFFF" />} />
+          <Button
+            onPress={() =>
+              setValue({
+                client: customer,
+                title,
+                status: selectedStatus,
+                createdAt: new Date(),
+                id: Math.random().toString(8).substring(2, 10),
+                items: [
+                  {
+                    id: Math.random().toString(8).substring(2, 10),
+                    description: "Design de interfaces",
+                    price: 384750,
+                    qty: 1,
+                  },
+                ],
+              })
+            }
+            name="Salvar"
+            icon={<Check color="#FFFFFF" />}
+          />
         </View>
       </KeyboardAvoidingView>
     </View>
