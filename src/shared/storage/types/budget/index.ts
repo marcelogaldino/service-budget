@@ -1,7 +1,8 @@
 import { StatusTypes } from "@/components/Status/strategies/status-stategy";
 
-interface Item {
+export interface Item {
   id: string;
+  name: string;
   description: string;
   qty: number;
   price: number;

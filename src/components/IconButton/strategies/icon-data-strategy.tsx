@@ -2,11 +2,13 @@ import { colors } from "@/shared/colors";
 import { Filter } from "@/assets/icons/Filter";
 import { Plus } from "@/assets/icons/Plus";
 import { Search } from "@/assets/icons/Search";
+import { Trash } from "@/assets/icons/Trash";
 
 export enum IconTypes {
   FILTER = "filter",
   PLUS = "plus",
   SEARCH = "search",
+  TRASH = "trash",
 }
 
 interface IconData {
@@ -26,5 +28,10 @@ export const ICONS: Record<IconTypes, IconData> = {
   [IconTypes.SEARCH]: {
     Icon: Search,
     color: colors["purple-base"],
+  },
+
+  [IconTypes.TRASH]: {
+    Icon: Trash,
+    color: colors["danger-base"],
   },
 };

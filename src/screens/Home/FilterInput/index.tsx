@@ -3,10 +3,14 @@ import { IconButton } from "@/components/IconButton";
 import { IconTypes } from "@/components/IconButton/strategies/icon-data-strategy";
 import { colors } from "@/shared/colors";
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { TextInput, View } from "react-native";
 
-export const FilterInput = () => {
+interface FilterInputProps {
+  onpress: () => void;
+}
+
+export const FilterInput: FC<FilterInputProps> = ({ onpress }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [textSearch, setTextSearch] = useState("");
   const inputRef = useRef<TextInput>(null);
@@ -33,7 +37,7 @@ export const FilterInput = () => {
           {
             "border-purple-base": isFocused,
             "border-gray-300": !isFocused,
-          }
+          },
         )}
       >
         <View className="ml-4">
@@ -52,6 +56,7 @@ export const FilterInput = () => {
         />
       </View>
       <IconButton
+        onPress={onpress}
         iconType={IconTypes.FILTER}
         isSearchTyping={textSearch.length >= 1}
       />

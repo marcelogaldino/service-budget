@@ -3,9 +3,14 @@ import { Button } from "@/components/Button";
 import { StackParamsList } from "@/routes";
 import { colors } from "@/shared/colors";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { FC } from "react";
 import { Text, View } from "react-native";
 
-export const Header = () => {
+interface HeaderProps {
+  draftCount: number;
+}
+
+export const Header: FC<HeaderProps> = ({ draftCount }) => {
   const navigation = useNavigation<NavigationProp<StackParamsList>>();
 
   return (
@@ -15,7 +20,8 @@ export const Header = () => {
           Orçamentos
         </Text>
         <Text className="text-gray-500 text-sm font-normal leading-[140%]">
-          Você tem 1 item em rascunho
+          Você tem {draftCount} {draftCount === 1 ? "item" : "itens"} em
+          rascunho
         </Text>
       </View>
       <Button

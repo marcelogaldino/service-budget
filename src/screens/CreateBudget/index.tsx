@@ -24,15 +24,121 @@ import { RadioButton } from "@/components/RadioButton";
 import { EditPen } from "@/assets/icons/EditPen";
 import { colors } from "@/shared/colors";
 import { useStorage } from "@/hooks/useStorage";
-import { BudgetDoc } from "@/shared/storage/types/budget";
+import { BudgetDoc, Item } from "@/shared/storage/types/budget";
+import { useBottomSheetContext } from "@/context/bottomsheet.context";
+import { NewService } from "./NewService";
+import { AppTextInput } from "@/components/AppTextInput";
 
 export const CreateBudget = () => {
-  const { setValue } = useStorage<BudgetDoc>("BudgetDoc");
+  const { openBottomSheet, closeBottomSheet } = useBottomSheetContext();
+  const { setValue, value } = useStorage<BudgetDoc[]>("BudgetDoc");
   const [title, setTitle] = useState<string>("");
   const [customer, setCustomer] = useState<string>("");
+  const [items, setItems] = useState<Item[]>([]);
+  const [discount, setDiscount] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<StatusTypes>(
     StatusTypes.RASCUNHO,
   );
+
+  const handleAddItem = (itemData: {
+    id?: string;
+    name: string;
+    description: string;
+    price: number;
+    qty: number;
+  }) => {
+    if (itemData.id) {
+      // Modo de edição - atualiza o item existente
+      setItems((prev) =>
+        prev.map((item) =>
+          item.id === itemData.id
+            ? {
+                ...item,
+                name: itemData.name,
+                description: itemData.description,
+                price: itemData.price,
+                qty: itemData.qty,
+              }
+            : item,
+        ),
+      );
+    } else {
+      // Modo de criação - adiciona novo item
+      const newItem: Item = {
+        id: Math.random().toString(36).substring(2, 10),
+        name: itemData.name,
+        description: itemData.description,
+        price: itemData.price,
+        qty: itemData.qty,
+      };
+      setItems((prev) => [...prev, newItem]);
+    }
+  };
+
+  const handleOpenNewService = () => {
+    openBottomSheet(
+      <NewService onpress={closeBottomSheet} onSave={handleAddItem} />,
+      0,
+    );
+  };
+
+  const handleEditNewService = (initialData: Item) => {
+    const handleUpdate = (itemData: {
+      name: string;
+      description: string;
+      price: number;
+      qty: number;
+    }) => {
+      handleAddItem({ ...itemData, id: initialData.id });
+    };
+
+    const handleDelete = () => {
+      setItems((prev) => prev.filter((item) => item.id !== initialData.id));
+      closeBottomSheet();
+    };
+
+    openBottomSheet(
+      <NewService
+        onpress={closeBottomSheet}
+        onSave={handleUpdate}
+        onDelete={handleDelete}
+        initialData={initialData}
+      />,
+      0,
+    );
+  };
+
+  const calculateSubtotal = () => {
+    return items.reduce((acc, item) => acc + item.price * item.qty, 0);
+  };
+
+  const calculateDiscount = () => {
+    const discountPct = parseFloat(discount) || 0;
+    return (calculateSubtotal() * discountPct) / 100;
+  };
+
+  const calculateTotal = () => {
+    return calculateSubtotal() - calculateDiscount();
+  };
+
+  const handleSaveBudget = () => {
+    if (!title.trim() || !customer.trim() || items.length === 0) {
+      return;
+    }
+
+    const budgetData: BudgetDoc = {
+      id: Math.random().toString(36).substring(2, 10),
+      client: customer,
+      title,
+      status: selectedStatus,
+      items,
+      discountPct: parseFloat(discount) || undefined,
+      createdAt: new Date(),
+    };
+
+    const existingBudgets = Array.isArray(value) ? value : [];
+    setValue([...existingBudgets, budgetData]);
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -61,21 +167,17 @@ export const CreateBudget = () => {
                   </View>
                 </View>
 
-                <View className="p-4 gap-2">
-                  <TextInput
-                    className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
-                    placeholder="Título"
-                    value={title}
-                    onChangeText={setTitle}
-                  />
+                <AppTextInput
+                  value={title}
+                  onChangeText={setTitle}
+                  placeholder="Título"
+                />
 
-                  <TextInput
-                    className="w-full h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
-                    placeholder="Cliente"
-                    value={customer}
-                    onChangeText={setCustomer}
-                  />
-                </View>
+                <AppTextInput
+                  value={customer}
+                  onChangeText={setCustomer}
+                  placeholder="Cliente"
+                />
               </View>
 
               <View className="border border-gray-300 rounded-lg mb-5">
@@ -130,65 +232,53 @@ export const CreateBudget = () => {
                 </View>
 
                 <View className="p-4 gap-2">
-                  {/* <View className="flex-row justify-center mb-5">
-                    <View className="flex-1">
-                      <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
-                        Design de interfaces
-                      </Text>
-                      <Text className="font-normal text-xs leading-4 text-gray-500">
-                        Criação de wireframes e protóti...
-                      </Text>
-                    </View>
-
-                    <View className=" items-end justify-center">
-                      <View className="flex-row justify-center items-center mb-[2px]">
-                        <Text className="font-normal text-xs leading-4 text-gray-700">
-                          R${"  "}
+                  {items.map((item) => (
+                    <View
+                      key={item.id}
+                      className="flex-row justify-center mb-5"
+                    >
+                      <View className="flex-1">
+                        <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
+                          {item.name}
                         </Text>
-                        <Text className="font-bold text-base leading-5 text-gray-700">
-                          3.847,50
+                        <Text className="font-normal text-xs leading-4 text-gray-500">
+                          {item.description.length > 35
+                            ? item.description.substring(0, 35) + "..."
+                            : item.description}
                         </Text>
                       </View>
-                      <Text className="font-normal text-xs leading-4 text-gray-600 ">
-                        Qt: 1
-                      </Text>
-                    </View>
 
-                    <TouchableOpacity className="ml-4 justify-center">
-                      <EditPen size={20} color={colors["purple-base"]} />
-                    </TouchableOpacity>
-                  </View> */}
-
-                  {/* <View className="flex-row justify-center mb-5"> */}
-                  {/* <View className="flex-1">
-                      <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
-                        Design de interfaces
-                      </Text>
-                      <Text className="font-normal text-xs leading-4 text-gray-500">
-                        Criação de wireframes e protóti...
-                      </Text>
-                    </View> */}
-
-                  {/* <View className=" items-end justify-center">
-                      <View className="flex-row justify-center items-center mb-[2px]">
-                        <Text className="font-normal text-xs leading-4 text-gray-700">
-                          R${"  "}
-                        </Text>
-                        <Text className="font-bold text-base leading-5 text-gray-700">
-                          3.847,50
+                      <View className=" items-end justify-center">
+                        <View className="flex-row justify-center items-center mb-[2px]">
+                          <Text className="font-normal text-xs leading-4 text-gray-700">
+                            R${"  "}
+                          </Text>
+                          <Text className="font-bold text-base leading-5 text-gray-700">
+                            {((item.price * item.qty) / 100).toLocaleString(
+                              "pt-BR",
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </Text>
+                        </View>
+                        <Text className="font-normal text-xs leading-4 text-gray-600 ">
+                          Qt: {item.qty}
                         </Text>
                       </View>
-                      <Text className="font-normal text-xs leading-4 text-gray-600 ">
-                        Qt: 1
-                      </Text>
-                    </View> */}
 
-                  {/* <TouchableOpacity className="ml-4 justify-center">
-                      <EditPen size={20} color={colors["purple-base"]} />
-                    </TouchableOpacity> */}
-                  {/* </View> */}
+                      <TouchableOpacity
+                        className="ml-4 justify-center"
+                        onPress={() => handleEditNewService(item)}
+                      >
+                        <EditPen size={20} color={colors["purple-base"]} />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
 
                   <Button
+                    onPress={handleOpenNewService}
                     name="Adiocionar serviço"
                     mode="outline"
                     icon={<Plus color="#6A46EB" />}
@@ -213,14 +303,17 @@ export const CreateBudget = () => {
                     </Text>
                     <View className="flex-row gap-3 justify-center items-center">
                       <Text className="font-normal text-xs text-gray-600">
-                        8 itens
+                        {items.length} {items.length === 1 ? "item" : "itens"}
                       </Text>
                       <View className="flex-row justify-center items-center">
                         <Text className="font-normal text-xs leading-4 text-gray-700">
                           R${"  "}
                         </Text>
                         <Text className="font-normal text-sm leading-5 text-gray-700">
-                          3.847,50
+                          {(calculateSubtotal() / 100).toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </Text>
                       </View>
                     </View>
@@ -236,20 +329,27 @@ export const CreateBudget = () => {
                           className="flex-1 items-center justify-center text-sm font-normal text-gray-700"
                           placeholder="0"
                           keyboardType="numeric"
+                          value={discount}
+                          onChangeText={setDiscount}
                         />
                         <Text className="font-bold text-base text-gray-600">
                           %
                         </Text>
                       </View>
                     </View>
-                    <View className="flex-row justify-center items-center">
-                      <Text className="font-normal text-xs leading-4 text-danger-base">
-                        - R${" "}
-                      </Text>
-                      <Text className="font-normal text-sm leading-5 text-danger-base">
-                        3.847,50
-                      </Text>
-                    </View>
+                    {discount && parseFloat(discount) > 0 && (
+                      <View className="flex-row justify-center items-center">
+                        <Text className="font-normal text-xs leading-4 text-danger-base">
+                          - R${" "}
+                        </Text>
+                        <Text className="font-normal text-sm leading-5 text-danger-base">
+                          {(calculateDiscount() / 100).toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>
@@ -260,23 +360,7 @@ export const CreateBudget = () => {
         <View className="flex-row justify-center items-center gap-4 px-5 pt-5 pb-10 w-full bg-white border-t border-gray-200">
           <Button name="Cancelar" mode="outline" />
           <Button
-            onPress={() =>
-              setValue({
-                client: customer,
-                title,
-                status: selectedStatus,
-                createdAt: new Date(),
-                id: Math.random().toString(8).substring(2, 10),
-                items: [
-                  {
-                    id: Math.random().toString(8).substring(2, 10),
-                    description: "Design de interfaces",
-                    price: 384750,
-                    qty: 1,
-                  },
-                ],
-              })
-            }
+            onPress={handleSaveBudget}
             name="Salvar"
             icon={<Check color="#FFFFFF" />}
           />
