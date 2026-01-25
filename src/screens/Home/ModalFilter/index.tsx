@@ -140,7 +140,7 @@ export const ModalFilter: FC<ModalFilterProps> = ({
       <View className="p-5 border-t border-gray-200">
         <Button
           onPress={() => onApply(statuses, sort)}
-          title="Aplicar filtros"
+          name="Aplicar filtros"
         />
       </View>
     </View>
