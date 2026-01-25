@@ -1,3 +1,4 @@
+import { Check } from "@/assets/icons/Check";
 import { Multiply } from "@/assets/icons/Multiply";
 import { Button } from "@/components/Button";
 import { RadioButton } from "@/components/RadioButton";
@@ -137,10 +138,17 @@ export const ModalFilter: FC<ModalFilterProps> = ({
         </View>
       </ScrollView>
 
-      <View className="p-5 border-t border-gray-200">
+      <View className="p-5 flex-row items-center justify-center gap-3 border-t border-gray-200">
+        <Button
+          onPress={() => onClear()}
+          name="Resetar filtros"
+          mode="outline"
+        />
+
         <Button
           onPress={() => onApply(statuses, sort)}
-          name="Aplicar filtros"
+          name="Aplicar"
+          icon={<Check color={colors.white} />}
         />
       </View>
     </View>
