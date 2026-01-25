@@ -8,9 +8,15 @@ import { TextInput, View } from "react-native";
 
 interface FilterInputProps {
   onpress: () => void;
+  onSearchChange: (text: string) => void;
+  hasActiveFilters?: boolean;
 }
 
-export const FilterInput: FC<FilterInputProps> = ({ onpress }) => {
+export const FilterInput: FC<FilterInputProps> = ({
+  onpress,
+  onSearchChange,
+  hasActiveFilters = false,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [textSearch, setTextSearch] = useState("");
   const inputRef = useRef<TextInput>(null);
@@ -23,11 +29,11 @@ export const FilterInput: FC<FilterInputProps> = ({ onpress }) => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setTextSearch(textSearch);
+      onSearchChange(textSearch);
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [textSearch]);
+  }, [textSearch, onSearchChange]);
 
   return (
     <View className="flex-row items-center gap-3">
@@ -58,7 +64,7 @@ export const FilterInput: FC<FilterInputProps> = ({ onpress }) => {
       <IconButton
         onPress={onpress}
         iconType={IconTypes.FILTER}
-        isSearchTyping={textSearch.length >= 1}
+        isSearchTyping={textSearch.length >= 1 || hasActiveFilters}
       />
     </View>
   );

@@ -1,9 +1,13 @@
 import { Status } from "@/components/Status";
 import { StatusTypes } from "@/components/Status/strategies/status-stategy";
+import { StackParamsList } from "@/routes";
+import { BudgetDoc } from "@/shared/storage/types/budget";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { FC } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 interface BudgetCardProps {
+  budget: BudgetDoc;
   status: StatusTypes;
   title: string;
   customer: string;
@@ -11,13 +15,19 @@ interface BudgetCardProps {
 }
 
 export const BudgetCard: FC<BudgetCardProps> = ({
+  budget,
   status,
   customer,
   title,
   totalPrice,
 }) => {
+  const navigation = useNavigation<NavigationProp<StackParamsList>>();
+
   return (
-    <TouchableOpacity className="w-full bg-gray-100 border border-gray-200 rounded-[10px] mt-2 p-4">
+    <TouchableOpacity
+      onPress={() => navigation.navigate("DetailsBudget", { budget })}
+      className="w-full bg-gray-100 border border-gray-200 rounded-[10px] mt-2 p-4"
+    >
       <View className="flex-row items-center justify-between mb-3">
         <Text className="flex-1 mr-2 text-[16px] font-bold text-gray-700">
           {title}

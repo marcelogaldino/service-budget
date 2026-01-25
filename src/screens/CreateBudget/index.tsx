@@ -28,6 +28,8 @@ import { BudgetDoc, Item } from "@/shared/storage/types/budget";
 import { useBottomSheetContext } from "@/context/bottomsheet.context";
 import { NewService } from "./NewService";
 import { AppTextInput } from "@/components/AppTextInput";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { StackParamsList } from "@/routes";
 
 export const CreateBudget = () => {
   const { openBottomSheet, closeBottomSheet } = useBottomSheetContext();
@@ -40,6 +42,8 @@ export const CreateBudget = () => {
     StatusTypes.RASCUNHO,
   );
 
+  const navigation = useNavigation<NavigationProp<StackParamsList>>();
+
   const handleAddItem = (itemData: {
     id?: string;
     name: string;
@@ -48,7 +52,6 @@ export const CreateBudget = () => {
     qty: number;
   }) => {
     if (itemData.id) {
-      // Modo de edição - atualiza o item existente
       setItems((prev) =>
         prev.map((item) =>
           item.id === itemData.id
@@ -63,7 +66,6 @@ export const CreateBudget = () => {
         ),
       );
     } else {
-      // Modo de criação - adiciona novo item
       const newItem: Item = {
         id: Math.random().toString(36).substring(2, 10),
         name: itemData.name,
@@ -117,10 +119,6 @@ export const CreateBudget = () => {
     return (calculateSubtotal() * discountPct) / 100;
   };
 
-  const calculateTotal = () => {
-    return calculateSubtotal() - calculateDiscount();
-  };
-
   const handleSaveBudget = () => {
     if (!title.trim() || !customer.trim() || items.length === 0) {
       return;
@@ -138,6 +136,7 @@ export const CreateBudget = () => {
 
     const existingBudgets = Array.isArray(value) ? value : [];
     setValue([...existingBudgets, budgetData]);
+    navigation.navigate("DetailsBudget", { budget: budgetData });
   };
 
   return (
