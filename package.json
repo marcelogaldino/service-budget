@@ -16,6 +16,7 @@
     "clsx": "^2.1.1",
     "expo": "~54.0.12",
     "expo-checkbox": "~5.0.8",
+    "expo-sharing": "~14.0.8",
     "expo-status-bar": "~3.0.9",
     "mage-icons-react": "^0.7.0-beta",
     "nativewind": "^4.0.0",

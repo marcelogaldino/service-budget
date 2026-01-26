@@ -1,18 +1,87 @@
 import { StackParamsList } from "@/routes";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { ScrollView, Text, View } from "react-native";
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import { ScrollView, Text, View, Share } from "react-native";
 import { Header } from "./Header";
 import { Shop } from "@/assets/icons/Shop";
 import { colors } from "@/shared/colors";
 import { NoteWithText } from "@/assets/icons/NoteWithText";
 import { CreditCard } from "@/assets/icons/CreditCard";
 import clsx from "clsx";
+import { Footer } from "./Footer";
+import { useStorage } from "@/hooks/useStorage";
+import { BudgetDoc } from "@/shared/storage/types/budget";
 
 type DetailsBudgetRouteProp = RouteProp<StackParamsList, "DetailsBudget">;
 
 export const DetailsBudget = () => {
   const route = useRoute<DetailsBudgetRouteProp>();
   const { budget } = route.params;
+
+  const navigation = useNavigation<NavigationProp<StackParamsList>>();
+
+  const { value, setValue } = useStorage<BudgetDoc[]>("BudgetDoc");
+
+  const handleDelete = () => {
+    const data = value && value.filter((item) => item.id !== budget.id);
+
+    if (data !== null) {
+      setValue([...data]);
+    }
+
+    navigation.navigate("Home");
+  };
+
+  const handleCopy = () => {
+    if (value) {
+      const duplicatedItem: BudgetDoc = {
+        id: Math.random().toString(36).substring(2, 10),
+        client: budget.client,
+        createdAt: new Date(),
+        status: budget.status,
+        title: budget.title,
+        discountPct: budget.discountPct,
+        items: budget.items,
+      };
+      setValue([...value, duplicatedItem]);
+
+      navigation.navigate("Home");
+    }
+  };
+
+  const handleEdit = () => {
+    navigation.navigate("CreateBudget", { budget });
+  };
+
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Orçamento ${budget.id}\nCliente: ${budget.client}\nServiços inclusos: ${budget.items.map((item) => item.name)},\nInvestimento total: ${(
+          calculateTotal() / 100
+        ).toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`,
+        title: "Solicitação de orçamento",
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log("Compartilhado com:", result.activityType);
+        } else {
+          console.log("Compartilhado com sucesso");
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log("Compartilhamento cancelado");
+      }
+    } catch (error) {
+      console.error("Erro ao compartilhar:", error);
+    }
+  };
 
   const calculateSubtotal = (): number => {
     return budget.items.reduce((acc, item) => acc + item.price * item.qty, 0);
@@ -101,20 +170,20 @@ export const DetailsBudget = () => {
                   <View className=" items-end justify-center">
                     <View className="flex-row justify-center items-center mb-[2px]">
                       <Text className="font-normal text-xs leading-4 text-gray-700">
-                        R${"  "}
-                      </Text>
-                      <Text className="font-bold text-base leading-5 text-gray-700">
-                        {((item.price * item.qty) / 100).toLocaleString(
-                          "pt-BR",
-                          {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          },
-                        )}
+                        <Text>R$ </Text>
+                        <Text className="font-bold text-base leading-5 text-gray-700">
+                          {((item.price * item.qty) / 100).toLocaleString(
+                            "pt-BR",
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )}
+                        </Text>
                       </Text>
                     </View>
                     <Text className="font-normal text-xs leading-4 text-gray-600 ">
-                      Qt: {item.qty}
+                      <Text>Qt: {item.qty}</Text>
                     </Text>
                   </View>
                 </View>
@@ -140,11 +209,13 @@ export const DetailsBudget = () => {
                           budget.discountPct && budget.discountPct > 0,
                       })}
                     >
-                      R${" "}
-                      {(calculateSubtotal() / 100).toLocaleString("pt-BR", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      <Text>R$ </Text>
+                      <Text>
+                        {(calculateSubtotal() / 100).toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </Text>
                     </Text>
                   </View>
 
@@ -161,14 +232,16 @@ export const DetailsBudget = () => {
                         </View>
                       </View>
                       <Text className="font-bold text-xs text-[#30752F]">
-                        - R${" "}
-                        {(calculateDiscountAmount() / 100).toLocaleString(
-                          "pt-BR",
-                          {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          },
-                        )}
+                        <Text>- R$ </Text>
+                        <Text>
+                          {(calculateDiscountAmount() / 100).toLocaleString(
+                            "pt-BR",
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )}
+                        </Text>
                       </Text>
                     </View>
                   )}
@@ -180,9 +253,9 @@ export const DetailsBudget = () => {
                   <Text className="font-bold text-sm text-gray-700">
                     Investimento total
                   </Text>
-                  <View className="flex-row gap-1 items-baseline">
+                  <Text className="flex-row gap-1 items-baseline">
                     <Text className="font-normal text-xs text-gray-700">
-                      R$
+                      <Text>R$ </Text>
                     </Text>
                     <Text className="font-bold text-lg text-gray-700">
                       {(calculateTotal() / 100).toLocaleString("pt-BR", {
@@ -190,13 +263,19 @@ export const DetailsBudget = () => {
                         maximumFractionDigits: 2,
                       })}
                     </Text>
-                  </View>
+                  </Text>
                 </View>
               </View>
             </View>
           </View>
         </View>
       </ScrollView>
+      <Footer
+        onCopy={handleCopy}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+        onShare={handleShare}
+      />
     </>
   );
 };

@@ -43,7 +43,6 @@ export const Home = () => {
   const filteredAndSortedData = useMemo(() => {
     let filtered = [...data];
 
-    // Filtro por texto
     if (searchText) {
       filtered = filtered.filter(
         (item) =>
@@ -52,14 +51,12 @@ export const Home = () => {
       );
     }
 
-    // Filtro por status
     if (selectedStatuses.length > 0) {
       filtered = filtered.filter((item) =>
         selectedStatuses.includes(item.status),
       );
     }
 
-    // Ordenação
     const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "recent":

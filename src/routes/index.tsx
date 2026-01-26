@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export type StackParamsList = {
   Home: undefined;
-  CreateBudget: undefined;
+  CreateBudget: { budget?: BudgetDoc };
   DetailsBudget: { budget: BudgetDoc };
 };
 

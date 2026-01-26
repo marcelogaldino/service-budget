@@ -25,7 +25,9 @@ export const Header: FC<HeaderProps> = ({ draftCount }) => {
         </Text>
       </View>
       <Button
-        onPress={() => navigation.navigate("CreateBudget")}
+        onPress={() =>
+          navigation.navigate("CreateBudget", { budget: undefined })
+        }
         name="Novo"
         mode="filled"
         icon={<Plus color={colors.white} size={24} />}

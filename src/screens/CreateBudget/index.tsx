@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "./Header";
 import { Button } from "@/components/Button";
 import { Check } from "@/assets/icons/Check";
@@ -28,8 +28,15 @@ import { BudgetDoc, Item } from "@/shared/storage/types/budget";
 import { useBottomSheetContext } from "@/context/bottomsheet.context";
 import { NewService } from "./NewService";
 import { AppTextInput } from "@/components/AppTextInput";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { StackParamsList } from "@/routes";
+
+type DetailsBudgetRouteProp = RouteProp<StackParamsList, "DetailsBudget">;
 
 export const CreateBudget = () => {
   const { openBottomSheet, closeBottomSheet } = useBottomSheetContext();
@@ -41,6 +48,9 @@ export const CreateBudget = () => {
   const [selectedStatus, setSelectedStatus] = useState<StatusTypes>(
     StatusTypes.RASCUNHO,
   );
+
+  const route = useRoute<DetailsBudgetRouteProp>();
+  const { budget } = route.params;
 
   const navigation = useNavigation<NavigationProp<StackParamsList>>();
 
@@ -124,6 +134,41 @@ export const CreateBudget = () => {
       return;
     }
 
+    const existingBudgets = Array.isArray(value) ? value : [];
+
+    if (budget) {
+      const data = existingBudgets.filter(
+        (budgetItem) => budgetItem.id !== budget.id,
+      );
+      const editedBudget = existingBudgets.map((budgetItem) =>
+        budgetItem.id === budget.id
+          ? {
+              ...budgetItem,
+              title: title,
+              client: customer,
+              status: selectedStatus,
+              items: items,
+              discountPct: Number(discount),
+              createdAt: new Date(),
+            }
+          : budgetItem,
+      );
+
+      setValue([...editedBudget]);
+      navigation.navigate("DetailsBudget", {
+        budget: {
+          id: budget.id,
+          title: title,
+          client: customer,
+          status: selectedStatus,
+          items: items,
+          discountPct: Number(discount),
+          createdAt: new Date(),
+        },
+      });
+      return;
+    }
+
     const budgetData: BudgetDoc = {
       id: Math.random().toString(36).substring(2, 10),
       client: customer,
@@ -134,10 +179,19 @@ export const CreateBudget = () => {
       createdAt: new Date(),
     };
 
-    const existingBudgets = Array.isArray(value) ? value : [];
     setValue([...existingBudgets, budgetData]);
     navigation.navigate("DetailsBudget", { budget: budgetData });
   };
+
+  useEffect(() => {
+    if (budget) {
+      setCustomer(budget.client);
+      setTitle(budget.title);
+      setDiscount(budget.discountPct ? budget.discountPct.toString() : "");
+      setItems(budget.items);
+      setSelectedStatus(budget.status);
+    }
+  }, [budget]);
 
   return (
     <View className="flex-1 bg-white">
