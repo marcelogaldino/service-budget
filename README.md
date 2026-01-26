@@ -2,7 +2,7 @@
 
 Um aplicativo mobile para gerenciamento de orçamentos de serviços, permitindo criar, visualizar e organizar propostas comerciais de forma prática e profissional.
 
-![Service Budget Banner](https://via.placeholder.com/1200x400/6A46EB/FFFFFF?text=Service+Budget)
+![Service Budget Banner](./assets/cover.png)
 
 ## 📋 Sobre o Projeto
 
