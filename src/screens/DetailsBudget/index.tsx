@@ -104,12 +104,14 @@ export const DetailsBudget = () => {
         className="flex-1 bg-white"
         contentContainerStyle={{ padding: 20 }}
       >
-        <View className="bg-gray-100 w-full border h-[196px] border-gray-200 rounded-lg mb-5">
+        <View className="bg-gray-100 border h-[196px] border-gray-200 rounded-lg mb-5">
           <View className="flex-row items-center justify-start gap-3  py-4 pl-4 pr-5 border-b border-gray-200">
             <View className="w-9 h-9 bg-purple-light rounded-lg justify-center items-center p-2">
               <Shop color={colors["purple-base"]} />
             </View>
-            <Text className="text-lg font-bold">{budget.title}</Text>
+            <Text className="text-lg font-bold flex-1 flex-shrink">
+              {budget.title}
+            </Text>
           </View>
 
           <View className=" py-4 pl-4 pr-5">
@@ -168,22 +170,20 @@ export const DetailsBudget = () => {
                   </View>
 
                   <View className=" items-end justify-center">
-                    <View className="flex-row justify-center items-center mb-[2px]">
-                      <Text className="font-normal text-xs leading-4 text-gray-700">
-                        <Text>R$ </Text>
-                        <Text className="font-bold text-base leading-5 text-gray-700">
-                          {((item.price * item.qty) / 100).toLocaleString(
-                            "pt-BR",
-                            {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            },
-                          )}
-                        </Text>
+                    <Text className="font-normal text-xs leading-4 text-gray-700 mb-[2px]">
+                      R${" "}
+                      <Text className="font-bold text-base leading-5 text-gray-700">
+                        {((item.price * item.qty) / 100).toLocaleString(
+                          "pt-BR",
+                          {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          },
+                        )}
                       </Text>
-                    </View>
+                    </Text>
                     <Text className="font-normal text-xs leading-4 text-gray-600 ">
-                      <Text>Qt: {item.qty}</Text>
+                      Qt: {item.qty}
                     </Text>
                   </View>
                 </View>
@@ -209,13 +209,11 @@ export const DetailsBudget = () => {
                           budget.discountPct && budget.discountPct > 0,
                       })}
                     >
-                      <Text>R$ </Text>
-                      <Text>
-                        {(calculateSubtotal() / 100).toLocaleString("pt-BR", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </Text>
+                      R${" "}
+                      {(calculateSubtotal() / 100).toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </Text>
                   </View>
 
@@ -232,16 +230,14 @@ export const DetailsBudget = () => {
                         </View>
                       </View>
                       <Text className="font-bold text-xs text-[#30752F]">
-                        <Text>- R$ </Text>
-                        <Text>
-                          {(calculateDiscountAmount() / 100).toLocaleString(
-                            "pt-BR",
-                            {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            },
-                          )}
-                        </Text>
+                        - R${" "}
+                        {(calculateDiscountAmount() / 100).toLocaleString(
+                          "pt-BR",
+                          {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          },
+                        )}
                       </Text>
                     </View>
                   )}
@@ -253,9 +249,9 @@ export const DetailsBudget = () => {
                   <Text className="font-bold text-sm text-gray-700">
                     Investimento total
                   </Text>
-                  <Text className="flex-row gap-1 items-baseline">
+                  <View className="flex-row gap-1 items-baseline">
                     <Text className="font-normal text-xs text-gray-700">
-                      <Text>R$ </Text>
+                      R$
                     </Text>
                     <Text className="font-bold text-lg text-gray-700">
                       {(calculateTotal() / 100).toLocaleString("pt-BR", {
@@ -263,7 +259,7 @@ export const DetailsBudget = () => {
                         maximumFractionDigits: 2,
                       })}
                     </Text>
-                  </Text>
+                  </View>
                 </View>
               </View>
             </View>

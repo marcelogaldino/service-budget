@@ -302,10 +302,8 @@ export const CreateBudget = () => {
                       </View>
 
                       <View className=" items-end justify-center">
-                        <View className="flex-row justify-center items-center mb-[2px]">
-                          <Text className="font-normal text-xs leading-4 text-gray-700">
-                            R${"  "}
-                          </Text>
+                        <Text className="font-normal text-xs leading-4 text-gray-700 mb-[2px]">
+                          R${" "}
                           <Text className="font-bold text-base leading-5 text-gray-700">
                             {((item.price * item.qty) / 100).toLocaleString(
                               "pt-BR",
@@ -315,7 +313,7 @@ export const CreateBudget = () => {
                               },
                             )}
                           </Text>
-                        </View>
+                        </Text>
                         <Text className="font-normal text-xs leading-4 text-gray-600 ">
                           Qt: {item.qty}
                         </Text>
@@ -360,13 +358,16 @@ export const CreateBudget = () => {
                       </Text>
                       <View className="flex-row justify-center items-center">
                         <Text className="font-normal text-xs leading-4 text-gray-700">
-                          R${"  "}
-                        </Text>
-                        <Text className="font-normal text-sm leading-5 text-gray-700">
-                          {(calculateSubtotal() / 100).toLocaleString("pt-BR", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          R${" "}
+                          <Text className="font-normal text-sm leading-5 text-gray-700">
+                            {(calculateSubtotal() / 100).toLocaleString(
+                              "pt-BR",
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </Text>
                         </Text>
                       </View>
                     </View>
@@ -391,17 +392,15 @@ export const CreateBudget = () => {
                       </View>
                     </View>
                     {discount && parseFloat(discount) > 0 && (
-                      <View className="flex-row justify-center items-center">
-                        <Text className="font-normal text-xs leading-4 text-danger-base">
-                          - R${" "}
-                        </Text>
+                      <Text className="font-normal text-xs leading-4 text-danger-base">
+                        - R${" "}
                         <Text className="font-normal text-sm leading-5 text-danger-base">
                           {(calculateDiscount() / 100).toLocaleString("pt-BR", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })}
                         </Text>
-                      </View>
+                      </Text>
                     )}
                   </View>
                 </View>
