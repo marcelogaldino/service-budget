@@ -4,7 +4,8 @@
     "slug": "service-budget",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/adaptative-icon.png",
+    "icon": "./assets/icon.png",
+    "scheme": "service-budget",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
