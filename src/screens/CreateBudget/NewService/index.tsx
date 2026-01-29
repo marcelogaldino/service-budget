@@ -1,12 +1,6 @@
 import { Multiply } from "@/assets/icons/Multiply";
 import { FC, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Check } from "@/assets/icons/Check";
 import { Button } from "@/components/Button";
 import { IconButton } from "@/components/IconButton";
