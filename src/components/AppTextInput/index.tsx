@@ -1,3 +1,4 @@
+import { colors } from "@/shared/colors";
 import { FC } from "react";
 import { TextInput, TextInputProps, View } from "react-native";
 
@@ -18,6 +19,7 @@ export const AppTextInput: FC<AppTextInput> = ({
         className="h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
         value={value}
         onChangeText={onChangeText}
+        placeholderTextColor={colors.gray[500]}
       />
     </View>
   );

@@ -10,6 +10,7 @@ import React, {
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { View, TouchableWithoutFeedback } from "react-native";
 import { colors } from "@/shared/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export interface BottomSheetContextType {
   openBottomSheet: (content: React.ReactNode, index: number) => void;
@@ -67,6 +68,9 @@ export const BottomSheetProvider: FC<PropsWithChildren> = ({ children }) => {
       )}
 
       <BottomSheet
+        keyboardBehavior="interactive"
+        android_keyboardInputMode="adjustPan"
+        keyboardBlurBehavior="restore"
         ref={bottomSheetRef}
         snapPoints={snapPoints}
         style={{ zIndex: 2 }}

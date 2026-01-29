@@ -11,6 +11,7 @@ import { Check } from "@/assets/icons/Check";
 import { Button } from "@/components/Button";
 import { IconButton } from "@/components/IconButton";
 import { IconTypes } from "@/components/IconButton/strategies/icon-data-strategy";
+import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 
 interface NewServiceProps {
   onpress: () => void;
@@ -110,7 +111,7 @@ export const NewService: FC<NewServiceProps> = ({
         showsVerticalScrollIndicator={false}
       >
         <View>
-          <TextInput
+          <BottomSheetTextInput
             className="h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 mb-3 text-base font-normal"
             value={name}
             onChangeText={setName}
@@ -118,7 +119,7 @@ export const NewService: FC<NewServiceProps> = ({
           />
         </View>
 
-        <TextInput
+        <BottomSheetTextInput
           className="min-h-[120px] bg-gray-100 border border-gray-300 rounded-3xl px-4 py-3 mb-2 text-base font-normal"
           value={description}
           onChangeText={setDescription}
@@ -129,7 +130,7 @@ export const NewService: FC<NewServiceProps> = ({
 
         <View className="flex-row gap-3 mt-2">
           <View className="flex-1">
-            <TextInput
+            <BottomSheetTextInput
               className="h-[48px] bg-gray-100 border border-gray-300 rounded-full px-4 py-3 text-base font-normal"
               value={value}
               onChangeText={handleValueChange}
@@ -138,10 +139,10 @@ export const NewService: FC<NewServiceProps> = ({
             />
           </View>
 
-          <View className="flex-row items-center bg-gray-100 border border-gray-300 rounded-full px-2 gap-2">
+          <View className="flex-row items-center bg-gray-100 border border-gray-300 rounded-full px-1 gap-2">
             <TouchableOpacity
               onPress={handleDecrement}
-              className="w-8 h-8 items-center justify-center"
+              className="w-12 h-12 items-center justify-center"
             >
               <Text className="text-purple-base text-xl font-normal">−</Text>
             </TouchableOpacity>
@@ -152,7 +153,7 @@ export const NewService: FC<NewServiceProps> = ({
 
             <TouchableOpacity
               onPress={handleIncrement}
-              className="w-8 h-8 items-center justify-center"
+              className="w-12 h-12 items-center justify-center"
             >
               <Text className="text-purple-base text-xl font-normal">+</Text>
             </TouchableOpacity>
@@ -160,7 +161,7 @@ export const NewService: FC<NewServiceProps> = ({
         </View>
       </ScrollView>
 
-      <View className="flex-row justify-center items-center gap-4 px-5 py-4 border-t border-gray-200 bg-white">
+      <View className="flex-row justify-center items-center gap-4 p-5 border-t border-gray-200 bg-white">
         {isEditMode && onDelete && (
           <IconButton iconType={IconTypes.TRASH} onPress={onDelete} />
         )}

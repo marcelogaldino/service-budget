@@ -8,6 +8,7 @@ import { colors } from "@/shared/colors";
 import Checkbox from "expo-checkbox";
 import { FC, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type SortType = "recent" | "oldest" | "highest" | "lowest";
 
@@ -138,7 +139,7 @@ export const ModalFilter: FC<ModalFilterProps> = ({
         </View>
       </ScrollView>
 
-      <View className="p-5 flex-row items-center justify-center gap-3 border-t border-gray-200">
+      <View className="flex-row justify-center py-10 px-5 gap-4 border-t border-gray-200 bg-white">
         <Button
           onPress={() => onClear()}
           name="Resetar filtros"

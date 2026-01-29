@@ -116,7 +116,7 @@ export const CreateBudget = () => {
         onDelete={handleDelete}
         initialData={initialData}
       />,
-      0,
+      1,
     );
   };
 
