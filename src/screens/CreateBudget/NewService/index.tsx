@@ -6,6 +6,7 @@ import { Button } from "@/components/Button";
 import { IconButton } from "@/components/IconButton";
 import { IconTypes } from "@/components/IconButton/strategies/icon-data-strategy";
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { colors } from "@/shared/colors";
 
 interface NewServiceProps {
   onpress: () => void;
@@ -110,6 +111,7 @@ export const NewService: FC<NewServiceProps> = ({
             value={name}
             onChangeText={setName}
             placeholder="Nome"
+            placeholderTextColor={colors.gray[500]}
           />
         </View>
 
@@ -120,6 +122,7 @@ export const NewService: FC<NewServiceProps> = ({
           placeholder="Descrição"
           multiline
           textAlignVertical="top"
+          placeholderTextColor={colors.gray[500]}
         />
 
         <View className="flex-row gap-3 mt-2">
@@ -130,6 +133,7 @@ export const NewService: FC<NewServiceProps> = ({
               onChangeText={handleValueChange}
               placeholder="R$ 0,00"
               keyboardType="numeric"
+              placeholderTextColor={colors.gray[500]}
             />
           </View>
 

@@ -385,6 +385,7 @@ export const CreateBudget = () => {
                           keyboardType="numeric"
                           value={discount}
                           onChangeText={setDiscount}
+                          placeholderTextColor={colors.gray[500]}
                         />
                         <Text className="font-bold text-base text-gray-600">
                           %
