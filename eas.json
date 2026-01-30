@@ -23,6 +23,11 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccounKeyPath": "./serviceBudget.json",
+        "track": "internal"
+      }
+    }
   }
 }
