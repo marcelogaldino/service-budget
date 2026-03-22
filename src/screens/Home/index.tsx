@@ -11,6 +11,7 @@ import { useBottomSheetContext } from "@/context/bottomsheet.context";
 import { StatusTypes } from "@/components/Status/strategies/status-stategy";
 import { useFocusEffect } from "@react-navigation/native";
 import { ModalFilter } from "./ModalFilter";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type SortType = "recent" | "oldest" | "highest" | "lowest";
 
@@ -105,44 +106,46 @@ export const Home = () => {
     );
 
   return (
-    <View className="bg-white flex-1 p-5">
-      <Header draftCount={draftCount} />
-      <FilterInput
-        onpress={() =>
-          openBottomSheet(
-            <ModalFilter
-              selectedStatuses={selectedStatuses}
-              selectedSort={sortBy}
-              onApply={handleApplyFilters}
-              onClear={handleClearFilters}
-            />,
-            1,
-          )
-        }
-        onSearchChange={setSearchText}
-        hasActiveFilters={selectedStatuses.length > 0 || sortBy !== "recent"}
-      />
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="bg-white flex-1 p-5">
+        <Header draftCount={draftCount} />
+        <FilterInput
+          onpress={() =>
+            openBottomSheet(
+              <ModalFilter
+                selectedStatuses={selectedStatuses}
+                selectedSort={sortBy}
+                onApply={handleApplyFilters}
+                onClear={handleClearFilters}
+              />,
+              1,
+            )
+          }
+          onSearchChange={setSearchText}
+          hasActiveFilters={selectedStatuses.length > 0 || sortBy !== "recent"}
+        />
 
-      <FlatList
-        className="pt-6"
-        data={filteredAndSortedData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <BudgetCard
-            budget={item}
-            status={item?.status}
-            customer={item.client}
-            title={item.title}
-            totalPrice={(calculateTotal(item) / 100).toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          />
-        )}
-        ListEmptyComponent={EmptyList}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 48 }}
-      />
-    </View>
+        <FlatList
+          className="pt-6"
+          data={filteredAndSortedData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <BudgetCard
+              budget={item}
+              status={item?.status}
+              customer={item.client}
+              title={item.title}
+              totalPrice={(calculateTotal(item) / 100).toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            />
+          )}
+          ListEmptyComponent={EmptyList}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 48 }}
+        />
+      </View>
+    </SafeAreaView>
   );
 };

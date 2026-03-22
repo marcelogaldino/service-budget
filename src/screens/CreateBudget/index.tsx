@@ -1,7 +1,5 @@
 import {
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -35,6 +33,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { StackParamsList } from "@/routes";
+import { KeyboardContainer } from "@/components/KeyboardContainer";
 
 type DetailsBudgetRouteProp = RouteProp<StackParamsList, "DetailsBudget">;
 
@@ -194,14 +193,10 @@ export const CreateBudget = () => {
   }, [budget]);
 
   return (
-    <View className="flex-1 bg-white">
-      <Header />
+    <KeyboardContainer>
+      <View className="flex-1 bg-white">
+        <Header />
 
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={0}
-      >
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={{ padding: 20, paddingBottom: 30 }}
@@ -302,9 +297,9 @@ export const CreateBudget = () => {
                       </View>
 
                       <View className=" items-end justify-center">
-                        <Text className="font-normal text-xs leading-4 text-gray-700 mb-[2px]">
+                        <Text className="font-normal text-xs text-gray-700 mb-[2px]">
                           R${" "}
-                          <Text className="font-bold text-base leading-5 text-gray-700">
+                          <Text className="font-bold text-base text-gray-700">
                             {((item.price * item.qty) / 100).toLocaleString(
                               "pt-BR",
                               {
@@ -418,7 +413,7 @@ export const CreateBudget = () => {
             icon={<Check color="#FFFFFF" />}
           />
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardContainer>
   );
 };

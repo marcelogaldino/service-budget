@@ -31,7 +31,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: getAppName(),
   slug: "service-budget",
-  version: "1.0.0",
+  version: "1.0.1",
   orientation: "portrait",
   icon: "./assets/icon.png",
   scheme: "service-budget",
@@ -44,13 +44,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: "#FFFFFF",
   },
   ios: {
-    supportsTablet: true,
+    supportsTablet: false,
     icon: {
       dark: "./assets/ios-dark.png",
       light: "./assets/ios-light.png",
       tinted: "./assets/ios-tinted.png",
     },
     bundleIdentifier: getUniqueIdentifier(),
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
   android: {
     adaptiveIcon: {
@@ -86,6 +89,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: "d8703161-0f84-40ab-9247-20a088fe7f6a",
     },
+  },
+  updates: {
+    url: "https://u.expo.dev/d8703161-0f84-40ab-9247-20a088fe7f6a",
+  },
+  runtimeVersion: {
+    policy: "appVersion",
   },
   owner: "marcelogaldino.app",
 });

@@ -6,6 +6,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { ScrollView, Text, View, Share } from "react-native";
+import { KeyboardContainer } from "@/components/KeyboardContainer";
 import { Header } from "./Header";
 import { Shop } from "@/assets/icons/Shop";
 import { colors } from "@/shared/colors";
@@ -98,7 +99,7 @@ export const DetailsBudget = () => {
   };
 
   return (
-    <>
+    <KeyboardContainer>
       <Header id={budget.id} status={budget.status} />
       <ScrollView
         className="flex-1 bg-white"
@@ -159,10 +160,10 @@ export const DetailsBudget = () => {
               {budget.items.map((item) => (
                 <View key={item.id} className="flex-row justify-center mb-5">
                   <View className="flex-1">
-                    <Text className="font-bold text-sm leading-5 text-gray-700 mb-[2px]">
+                    <Text className="font-bold text-sm text-gray-700 mb-[2px]">
                       {item.name}
                     </Text>
-                    <Text className="font-normal text-xs leading-4 text-gray-500">
+                    <Text className="font-normal text-xs text-gray-500">
                       {item.description.length > 35
                         ? item.description.substring(0, 35) + "..."
                         : item.description}
@@ -170,9 +171,9 @@ export const DetailsBudget = () => {
                   </View>
 
                   <View className=" items-end justify-center">
-                    <Text className="font-normal text-xs leading-4 text-gray-700 mb-[2px]">
+                    <Text className="font-normal text-xs text-gray-700 mb-[2px]">
                       R${" "}
-                      <Text className="font-bold text-base leading-5 text-gray-700">
+                      <Text className="font-bold text-base text-gray-700">
                         {((item.price * item.qty) / 100).toLocaleString(
                           "pt-BR",
                           {
@@ -242,9 +243,7 @@ export const DetailsBudget = () => {
                     </View>
                   )}
                 </View>
-
                 <View className="h-[1px] bg-gray-200" />
-
                 <View className="flex-row items-center justify-between">
                   <Text className="font-bold text-sm text-gray-700">
                     Investimento total
@@ -272,6 +271,6 @@ export const DetailsBudget = () => {
         onEdit={handleEdit}
         onShare={handleShare}
       />
-    </>
+    </KeyboardContainer>
   );
 };
